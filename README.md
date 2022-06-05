@@ -9,29 +9,30 @@ A aplicação deve rodar sobre UDP e deve ser orientada à conexão. Durante o e
 da conexão, deve ser passado o tamanho da janela que será usado.
 O formato do pacote que será enviado pela rede está definido abaixo:
 
-![image](https://user-images.githubusercontent.com/53906470/172057045-62426e03-0f5c-427e-a88f-0d967e8c8388.png)
+   ![image](https://user-images.githubusercontent.com/53906470/172057045-62426e03-0f5c-427e-a88f-0d967e8c8388.png)
 
 Máquina. Origem Máquina Destino Tipo Sequencia Dados CRC
 Máquina Origem: Nome da máquina origem
 Máquina Destino: Nome da máquina destino
 Tipo: 00 para pacote de dados
- 01 para ACK
- 11 para REJECT
+  01 para ACK
+  11 para REJECT
 Sequencia: Número de seqüência do pacote sendo enviado, sendo confirmado ou sendo rejeitado.
 Dados: Presente apenas para pacote de dados. Dados do arquivo que está sendo enviado.
 CRC: Controle de erro
+
 A rede que suportará a simulação é uma rede de alta velocidade e com taxa de erros muito
 baixa, de forma que os pacotes gerados pela aplicação não serão espontaneamente perdidos.
 Assim sendo, deve haver um módulo de inserção de falhas que force as estações a enviar uma
 mensagem de “erro”. Essa função deve inserir falhas aleatoriamente durante a transmissão e o
-protótipo deverá operar em dois modos distintos: com e sem falhas.
-Com falhas: Quando ocorrer uma falha, o protocolo na máquina destino transmite uma
+protótipo deverá operar em dois modos distintos: **com** e **sem falhas**.
+
+**Com falhas**: Quando ocorrer uma falha, o protocolo na máquina destino transmite uma
 mensagem de REJECT informando o número de sequência do pacote com erro.
+
 Para a verificação de erros o algoritmo de CRC deverá ser implementado e o polinômio gerador
-que será utilizado é o seguinte:
-1
-8 6 3
-x + x + x + x +
+que será utilizado é o seguinte: x^8 + x^6 + x^3 + x + 1
+
 A máquina origem, ao identificar que uma mensagem chegou com erro no destino, deverá
 retransmiti-la de acordo com a técnica de Selective Reject. Deve ser previsto um número
 máximo de retransmissões (3 retransmissões) e, quando este número for excedido, deverá ser
