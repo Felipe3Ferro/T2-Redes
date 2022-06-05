@@ -8,9 +8,10 @@ transferido e o tamanho da janela para essa transferência. A área de dados nã
 A aplicação deve rodar sobre UDP e deve ser orientada à conexão. Durante o estabelecimento
 da conexão, deve ser passado o tamanho da janela que será usado.
 O formato do pacote que será enviado pela rede está definido abaixo:
-Máquina. Origem Máquina Destino Tipo Sequencia Dados CRC
+
 ![image](https://user-images.githubusercontent.com/53906470/172057045-62426e03-0f5c-427e-a88f-0d967e8c8388.png)
 
+Máquina. Origem Máquina Destino Tipo Sequencia Dados CRC
 Máquina Origem: Nome da máquina origem
 Máquina Destino: Nome da máquina destino
 Tipo: 00 para pacote de dados
