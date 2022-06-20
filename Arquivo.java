@@ -5,19 +5,18 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 import java.util.Scanner;
 
 public class Arquivo {
-    public static List<String> leitor(String path) throws IOException {
-		List<String> retorno = new ArrayList<String>();
+    public static ArrayList<String> leitor(String path) throws IOException {
+		ArrayList<String> retorno = new ArrayList<String>();
 		BufferedReader buffRead = new BufferedReader(new FileReader(path));
 		String linha = "";
 		while (true) {
 			linha = buffRead.readLine();
 			if (linha != null) {
 				String [] stringArray=linha.split("");
-				retorno.add(Arrays.toString(stringArray));
+				retorno.addAll(Arrays.asList(stringArray));
 			} else{
 				break;
 			}

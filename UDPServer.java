@@ -3,7 +3,9 @@
 // Imprime o dado na tela
 
 import java.io.*;
+import java.math.BigInteger;
 import java.net.*;
+import java.util.List;
 
 class UDPServer {
    public static void main(String args[])  throws Exception
@@ -28,6 +30,12 @@ class UDPServer {
 
          //          System.out.println("Mensagem recebida: " + sentence);
          //       }
-        System.out.println(Arquivo.leitor("txt.txt").toString());
+         List<String> arquivo = Arquivo.leitor("txt.txt");
+         byte[]  byteArray = arquivo.get(0).getBytes("UTF-8");
+         System.out.println(byteArray[0]);
+         BigInteger one = new BigInteger(byteArray);
+         String strResult = one.toString(2);
+         System.out.println("ByteArray to Binary = "+strResult);
+
       }
 }
