@@ -8,16 +8,16 @@ import java.util.Arrays;
 import java.util.Scanner;
 
 public class Arquivo {
-    public static ArrayList<String> leitor(String path) throws IOException {
+	public static ArrayList<String> leitor(String path) throws IOException {
 		ArrayList<String> retorno = new ArrayList<String>();
 		BufferedReader buffRead = new BufferedReader(new FileReader(path));
 		String linha = "";
 		while (true) {
 			linha = buffRead.readLine();
 			if (linha != null) {
-				String [] stringArray=linha.split("");
+				String[] stringArray = linha.split("");
 				retorno.addAll(Arrays.asList(stringArray));
-			} else{
+			} else {
 				break;
 			}
 		}
