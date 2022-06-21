@@ -6,10 +6,10 @@ public class Pacote {
     String destino;
     String tipo;
     String sequencia;
-    ArrayList<String> dados;
+    int dados[];
     int crc[];
 
-    public Pacote(String origem, String destino, String tipo, String sequencia, ArrayList<String> dados, int[] crc) {
+    public Pacote(String origem, String destino, String tipo, String sequencia, int[] dados, int[] crc) {
         this.origem = origem;
         this.destino = destino;
         this.tipo = tipo;
@@ -50,11 +50,11 @@ public class Pacote {
         this.sequencia = sequencia;
     }
 
-    public ArrayList<String> getDados() {
+    public int[] getDados() {
         return dados;
     }
 
-    public void setDados(ArrayList<String> dados) {
+    public void setDados(int[] dados) {
         this.dados = dados;
     }
 
@@ -69,10 +69,15 @@ public class Pacote {
     @Override
     public String toString() {
         String crcs = "";
+        String dadoss = "";
         for (int i = 0; i < crc.length - 1; i++) {
             crcs += crc[i];
         }
-        return "Pacote [crc=" + crcs + ", dados=" + dados + ", destino=" + destino + ", origem="
+
+        for (int i = 0; i < dados.length; i++) {
+            dadoss += dados[i];
+        }
+        return "Pacote [crc=" + crcs + ", dados=" + dadoss + ", destino=" + destino + ", origem="
                 + origem + ", sequencia=" + sequencia + ", tipo=" + tipo + "]";
     }
 
