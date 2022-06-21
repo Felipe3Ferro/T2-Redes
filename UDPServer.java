@@ -3,12 +3,16 @@
 
 import java.io.*; // classes para input e output streams e
 import java.net.*;// DatagramaSocket,InetAddress,DatagramaPacket
+import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
+import java.util.regex.Pattern;
 
 class UDPServer {
    static Socket connection;
 
    public static void main(String args[]) throws Exception {
+
+      int polynomial[] = { 1, 0, 1, 0, 1 };
 
       InetAddress addr = InetAddress.getByName("Localhost");
       System.out.println(addr);
@@ -26,15 +30,33 @@ class UDPServer {
          }
          convert(v, string);
          System.out.println(string);
-         String crc = "";
-         for (int j = 0; j < v.length - 3; j++) {
-            if (string[j] == 'c' && string[j + 1] == 'r' && string[j + 2] == 'c') {
-               while (string[j + 4] == '0' || string[j + 4] == '1') {
-                  crc += string[j + 4];
-               }
-            }
+         String tripa = "";
+         for (int j = 0; j < v.length; j++) {
+            tripa += string[j];
          }
-         System.out.println("aaa");
+         String dados[] = tripa.split(Pattern.quote(","));
+         Charset charset = Charset.forName("ASCII");
+      
+         String crc = dados[0].toString();
+         String data = dados[1].toString();
+
+         byte[] byteCrc = crc.getBytes(charset);
+         byte[] byteData = data.getBytes(charset);
+
+         int[] intCrc = new int[byteCrc.length];
+         int[] intData = new int[byteData.length];
+
+         for (int j = 0; j < byteCrc.length; j++) {
+             intCrc[j]= byteCrc[j] ;
+         }
+
+         for (int j = 0; j < byteData.length; j++) {
+            intData[j]= byteData[j] ;
+        }
+
+        String result = Crc.receiveData(intData, polynomial, intCrc);
+        out.writeInt(Integer.parseInt(result));
+         
       }
    }
 

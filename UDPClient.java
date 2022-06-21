@@ -45,9 +45,25 @@ class UDPCliente {
             dos.flush();
          }
 
-      }
+         int ack = dis.readInt();
 
-      System.out.println(dis.read());
+         while(ack != 11){
+            inputString = pacote.toString();
+            charset = Charset.forName("ASCII");
+   
+            byteArrray = inputString.getBytes(charset);
+   
+            dos.write(byteArrray.length);
+            dos.flush();
+   
+            for (int i = 0; i < byteArrray.length; i++) {
+               dos.write(byteArrray[i]);
+               dos.flush();
+            }
+            ack = dis.readInt();
+         }
+      }
+      System.out.println("Enviada com sucesso!");
 
    }
 

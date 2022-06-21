@@ -77,8 +77,8 @@ public class Pacote {
         for (int i = 0; i < dados.length; i++) {
             dadoss += dados[i];
         }
-        return "Pacote [crc=" + crcs + ", dados=" + dadoss + ", destino=" + destino + ", origem="
-                + origem + ", sequencia=" + sequencia + ", tipo=" + tipo + "]";
+        return  crcs + "," + dadoss + "," + destino + ","
+                + origem + "," + sequencia + "," + tipo;
     }
 
 }
