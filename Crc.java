@@ -37,17 +37,16 @@ class Crc {
         return 1;
     }
 
-    static void receiveData(int data[], int divisor[]) {
+    static String receiveData(int data[], int polynomial[], int divisor[]) {
 
         int rem[] = divideDataWithDivisor(data, divisor);
 
         for (int i = 0; i < rem.length; i++) {
             if (rem[i] != 0) {
 
-                System.out.println("Currupted data received...");
-                return;
+                return "11";
             }
         }
-        System.out.println("Data received without any error.");
+        return "01";
     }
 }

@@ -1,42 +1,48 @@
-// Recebe um pacote de algum cliente
-// Separa o dado, o endere�o IP e a porta deste cliente
-// Imprime o dado na tela
+// L� uma linha do teclado
+// Envia o pacote (linha digitada) ao servidor
 
-import java.io.*;
-import java.math.BigInteger;
-import java.net.*;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.ForkJoinTask;
-
-import javax.xml.crypto.Data;
+import java.io.*; // classes para input e output streams e
+import java.net.*;// DatagramaSocket,InetAddress,DatagramaPacket
+import java.nio.charset.StandardCharsets;
 
 class UDPServer {
+   static Socket connection;
 
    public static void main(String args[]) throws Exception {
 
-      // cria socket do servidor com a porta 9876
-      DatagramSocket serverSocket = new DatagramSocket(9876);
+      InetAddress addr = InetAddress.getByName("Localhost");
+      System.out.println(addr);
+      connection = new Socket(addr, 8011);
+      DataOutputStream out = new DataOutputStream(connection.getOutputStream());
+      DataInputStream in = new DataInputStream(connection.getInputStream());
 
-      byte[] receiveData = new byte[1024];
-
-      while (true) {
-         // declara o pacote a ser recebido
-         DatagramPacket receivePacket = new DatagramPacket(receiveData,
-               receiveData.length);
-
-         // recebe o pacote do cliente
-         serverSocket.receive(receivePacket);
-
-         // pega os dados, o endere�o IP e a porta do cliente
-         // para poder mandar a msg de volta
-         String sentence = new String(receivePacket.getData());
-         InetAddress IPAddress = receivePacket.getAddress();
-         int port = receivePacket.getPort();
-
-         System.out.println("Mensagem recebida: " + sentence);
+      int iteracoes = in.read();
+      for (int i = 0; i < iteracoes; i++) {
+         int tam = in.read();
+         char string[] = new char[tam];
+         int v[] = new int[tam];
+         for (int j = 0; j < tam; j++) {
+            v[j] = in.read();
+         }
+         convert(v, string);
+         System.out.println(string);
+         String crc = "";
+         for (int j = 0; j < v.length - 3; j++) {
+            if (string[j] == 'c' && string[j + 1] == 'r' && string[j + 2] == 'c') {
+               while (string[j + 4] == '0' || string[j + 4] == '1') {
+                  crc += string[j + 4];
+               }
+            }
+         }
+         System.out.println("aaa");
       }
-
    }
 
+   public static void convert(int[] array, char[] array1) {
+      int length = array.length;
+      for (int i = 0; i < length; i++) {
+         // this converts a integer into a character
+         array1[i] = (char) array[i];
+      }
+   }
 }

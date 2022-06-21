@@ -1,13 +1,57 @@
-// L� uma linha do teclado
-// Envia o pacote (linha digitada) ao servidor
+// Recebe um pacote de algum cliente
+// Separa o dado, o endere�o IP e a porta deste cliente
+// Imprime o dado na tela
 
-import java.io.*; // classes para input e output streams e
-import java.net.*;// DatagramaSocket,InetAddress,DatagramaPacket
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.net.*;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 
-class UDPClient {
+class UDPCliente {
+
+   public static ArrayList<Pacote> pacotes = new ArrayList<Pacote>();
+   static ServerSocket Serversocket;
+   static DataInputStream dis;
+   static DataOutputStream dos;
+   static int canal = 5;
+   public static byte[] sendData = new byte[1024];
+
    public static void main(String args[]) throws Exception {
-      ArrayList<Pacote> pacotes = new ArrayList<Pacote>();
+
+      criaPacote();
+
+      Serversocket = new ServerSocket(8011);
+      System.out.println("waiting for connection");
+      Socket client = Serversocket.accept();
+      dis = new DataInputStream(client.getInputStream());
+      dos = new DataOutputStream(client.getOutputStream());
+
+      dos.write(pacotes.size());
+      dos.flush();
+
+      for (Pacote pacote : pacotes) {
+         String inputString = pacote.toString();
+         Charset charset = Charset.forName("ASCII");
+
+         byte[] byteArrray = inputString.getBytes(charset);
+
+         dos.write(byteArrray.length);
+         dos.flush();
+
+         for (int i = 0; i < byteArrray.length; i++) {
+            dos.write(byteArrray[i]);
+            dos.flush();
+         }
+
+      }
+
+      System.out.println(dis.read());
+
+   }
+
+   public static void criaPacote() throws IOException {
       ArrayList<String> arquivo = Arquivo.leitor("txt.txt");
       ArrayList<String> binario = new ArrayList<String>();
       // int data2[] = { 1, 1, 0, 1, 1, 0, 1 };
@@ -17,12 +61,12 @@ class UDPClient {
 
       for (String elementoArquivo : arquivo) {
          binario.add(StringToBinary.convertStringToBinary(elementoArquivo));
-         System.out.println(StringToBinary.convertStringToBinary(elementoArquivo));
+         // System.out.println(StringToBinary.convertStringToBinary(elementoArquivo));
       }
 
-      for (int k = 1; k < arquivo.size()+1; k++) {
+      for (int k = 1; k < arquivo.size() + 1; k++) {
          count++;
-         if(k%10 == 0 || k == arquivo.size()){
+         if (k % 10 == 0 || k == arquivo.size()) {
             String dataString = "";
             for (int i = 0; i < count; i++) {
                dataString += binario.get(0);
@@ -34,42 +78,14 @@ class UDPClient {
             for (int j = 0; j < dataString.length(); j++) {
                data[j] = Integer.parseInt(String.valueOf(dataString.charAt(j)));
             }
-            
 
             Pacote p1 = new Pacote("origem", "destino", "00", sequencia.toString(), data,
                   Crc.divideDataWithDivisor(data, polynomial));
             pacotes.add(p1);
-            System.out.println(p1.toString());
+            // System.out.println(p1.toString());
             sequencia++;
             count = 0;
          }
       }
-      // declara socket cliente
-      DatagramSocket clientSocket = new DatagramSocket();
-
-      // obtem endere�o IP do servidor com o DNS
-      InetAddress IPAddress = InetAddress.getByName("localhost");
-
-      byte[] sendData = new byte[1024];
-      byte[] receiveData = new byte[1024];
-
-      // while (true) {
-      // l� uma linha do teclado
-
-      for (byte b : receiveData) {
-         
-      String sentence = p1.toString();
-      sendData = sentence.getBytes();
-      
-      }
-
-      // cria pacote com o dado, o endere�o do server e porta do servidor
-      DatagramPacket sendPacket = new DatagramPacket(sendData, sendData.length, IPAddress, 9876);
-
-      // envia o pacote
-      clientSocket.send(sendPacket);
-
-      // }
-
    }
 }
